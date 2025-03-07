@@ -1,0 +1,35 @@
+# Home Assistant Add-on .gitignore
+
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# Logs
+*.log
+
+# Build files
+build/
+dist/
+
+# Temporary files
+.tmp/
+.temp/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Operating System Files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,74 @@
+#include <tunables/global>
+
+profile claude_code flags=(attach_disconnected,mediate_deleted) {
+  #include <abstractions/base>
+  #include <abstractions/bash>
+  #include <abstractions/python>
+  #include <abstractions/nodejs>
+
+  # Capabilities
+  capability net_bind_service,
+  capability dac_read_search,
+  capability setgid,
+  capability setuid,
+  capability sys_admin,
+  capability sys_chroot,
+  capability sys_ptrace,
+  capability sys_resource,
+  capability mknod,
+
+  # S6-Overlay
+  /init rix,
+  /init.sh rix,
+  /bin/** rix,
+  /usr/bin/** rix,
+  /run/{s6,s6-rc*,service}/** rix,
+  /package/** rix,
+  /command/** rix,
+  /etc/services.d/** rwix,
+  /etc/cont-init.d/** rwix,
+  /etc/cont-finish.d/** rwix,
+  /run/{,**} rwk,
+  /dev/tty rw,
+
+  # Bashio
+  /usr/lib/bashio/** ix,
+  /tmp/** rwk,
+
+  # Access to options.json and other files within your addon
+  /data/** rw,
+
+  # Access to mapped volumes
+  /config/** rw,
+  /ssl/** r,
+  /addons/** r,
+  /share/** rw,
+  /dev/** rwm,
+  /proc/** r,
+
+  # Network access
+  network tcp,
+  network udp,
+
+  # Claude Code specific permissions
+  /usr/src/app/** rwix,
+  /usr/src/app/node_modules/** mrwix,
+  /usr/local/bin/** crix,
+  /usr/lib/node_modules/** mrwix,
+
+  # Node.js & NPM
+  /usr/local/bin/node crix,
+  /usr/local/bin/npm crix,
+
+  # Standard folders
+  /opt/** r,
+  /usr/** r,
+  /lib/** r,
+
+  # Allow logging
+  /proc/*/stat r,
+  /proc/uptime r,
+
+  # Terminal access
+  /dev/pts/* rw,
+}
