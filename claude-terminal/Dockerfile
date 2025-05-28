@@ -1,20 +1,24 @@
 ARG BUILD_FROM
 FROM ${BUILD_FROM}
 
-# Install basic packages
-RUN apk add --no-cache nodejs npm bash curl
+# Install packages in a single layer to minimize image size
+RUN apk add --no-cache \
+    nodejs \
+    npm \
+    bash \
+    curl \
+    && npm install -g @anthropic-ai/claude-code \
+    && npm cache clean --force
 
-# Create directory for Claude configuration and set working directory to /config
+# Create directory for Claude configuration and set working directory
 RUN mkdir -p /config/claude-config
 WORKDIR /config
 
-# Install Claude Code
-RUN npm install -g @anthropic-ai/claude-code
-RUN npm cache clean --force
+# Copy startup script and modular scripts
+COPY run.sh /run.sh
+COPY scripts/ /config/scripts/
+RUN chmod +x /run.sh \
+    && chmod +x /config/scripts/*.sh
 
-# Create startup script
-COPY run.sh /
-RUN chmod a+x /run.sh
-
-# Command to run
+# Use exec form for better signal handling
 CMD ["/run.sh"]
