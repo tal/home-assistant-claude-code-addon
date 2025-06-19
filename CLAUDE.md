@@ -1,14 +1,59 @@
 # Claude Code Helper for Home Assistant Add-ons
 
-## Build Commands
-- Build add-on: `docker build -t local/claude-terminal ./claude-terminal`
-- Run add-on locally: `docker run -p 7681:7681 -v $(pwd)/config:/config local/claude-terminal`
-- Validate: `docker run --rm -v $(pwd):/data homeassistant/amd64-builder --validate`
-- Lint Dockerfile: `hadolint ./claude-terminal/Dockerfile`
+## Development Environment Setup (NixOS)
 
-## Test Commands
-- Basic functionality test: `curl -X GET http://localhost:7681/`
-- Web terminal test: Open browser to `http://localhost:7681/` to verify web terminal loads
+### Quick Start
+```bash
+# Enter the development shell
+nix develop
+
+# Or with direnv (if installed)
+direnv allow
+```
+
+### Docker Service Setup
+The Docker daemon must be running for container operations:
+
+```bash
+# Start Docker service (one-time)
+sudo systemctl start docker
+
+# Or enable automatic startup by adding to your NixOS config:
+# virtualisation.docker.enable = true;
+```
+
+## Development Commands
+
+### Build & Run
+- `build-addon` - Build the Claude Terminal add-on
+- `run-addon` - Run add-on locally on port 7681
+- `lint-dockerfile` - Lint Dockerfile with hadolint
+- `test-endpoint` - Test web endpoint availability
+
+### Manual Commands (if not using aliases)
+- Build: `docker build -t local/claude-terminal ./claude-terminal`
+- Run: `docker run -p 7681:7681 -v $(pwd)/config:/config local/claude-terminal`
+- Lint: `hadolint ./claude-terminal/Dockerfile`
+- Test: `curl -X GET http://localhost:7681/`
+
+### Without Development Shell
+```bash
+# Build with nix-shell
+nix-shell --packages docker hadolint --run "docker build -t local/claude-terminal ./claude-terminal"
+
+# Lint with nix-shell
+nix-shell --packages hadolint --run "hadolint ./claude-terminal/Dockerfile"
+```
+
+## Testing
+- **Web Interface**: Open `http://localhost:7681/` to verify terminal loads
+- **Functionality**: Test Claude authentication and command execution
+- **Container Health**: Check logs with `docker logs <container-id>`
+
+## Notes
+- Add-on targets Home Assistant OS (Alpine Linux base) for deployment
+- Development environment provides NixOS compatibility
+- Full HA validation requires Home Assistant OS environment
 
 ## Code Style Guidelines
 - **Indentation**: 2 spaces for YAML, 4 spaces for shell scripts
