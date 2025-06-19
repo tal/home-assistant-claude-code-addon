@@ -7,7 +7,7 @@ RUN apk add --no-cache \
     npm \
     bash \
     curl \
-    && npm install -g @anthropic-ai/claude-code \
+    && npm install -g @anthropic-ai/claude-code@latest \
     && npm cache clean --force
 
 # Create directory for Claude configuration and set working directory

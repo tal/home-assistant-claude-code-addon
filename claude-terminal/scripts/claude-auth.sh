@@ -15,7 +15,8 @@ find_credentials() {
     echo "Searching for credential files..."
     echo ""
     echo "Looking in common locations:"
-    find / -name "auth.json" -o -name "*claude*" -o -name "*anthropic*" 2>/dev/null | grep -v "node_modules\|npm" | sort
+    # Only search in safe user directories, not system-wide
+    find /root /home /tmp /config -name "auth.json" -o -name "*claude*" -o -name "*anthropic*" 2>/dev/null | grep -v "node_modules\|npm\|bin/" | sort
 }
 
 debug_info() {
@@ -60,8 +61,8 @@ save_credentials() {
         echo "Claude JSON credential file not found at /root/.claude.json"
     fi
     
-    # Also search for any other potential credential files
-    cred_files=$(find / -name "auth.json" -o -name "*claude*" -o -name "*anthropic*" 2>/dev/null | grep -v "node_modules\|npm\|/config/claude-config" | grep -v "bin/claude\|bin/claude-auth")
+    # Also search for any other potential credential files in safe directories only
+    cred_files=$(find /root /home /tmp -maxdepth 3 -name "auth.json" -o -name "*claude*" -o -name "*anthropic*" 2>/dev/null | grep -v "node_modules\|npm\|/config/claude-config\|bin/" | head -20)
     if [ -z "$cred_files" ]; then
         echo "No additional credential files found."
     else
@@ -77,16 +78,19 @@ save_credentials() {
     fi
     
     echo "Setting permissions on credential files..."
-    chmod -R 755 /config/claude-config/
+    chmod -R 600 /config/claude-config/
     
     echo "Done saving credentials."
 }
 
 logout() {
     echo "Clearing credentials and symlinks..."
-    rm -rf /config/claude-config/* /root/.config/anthropic/
-    find / -name "auth.json" -o -name "*claude*" -o -name "*anthropic*" 2>/dev/null | grep -v "node_modules\|npm\|claude-terminal" | xargs rm -f 2>/dev/null
-    echo "All credentials cleared. Please restart the add-on to re-authenticate."
+    # Safely remove only credential files we created
+    rm -rf /config/claude-config/.claude* /config/claude-config/auth.json /config/claude-config/credentials.json
+    rm -rf /root/.config/anthropic/ /root/.claude* 
+    # Remove any credential files in safe user directories only
+    find /root /tmp -maxdepth 2 -name ".claude*" -o -name "auth.json" 2>/dev/null | grep -v "node_modules\|npm\|bin/" | xargs rm -f 2>/dev/null
+    echo "Credentials cleared. Please restart the add-on to re-authenticate."
 }
 
 case "$1" in

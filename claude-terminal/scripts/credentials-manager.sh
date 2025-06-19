@@ -30,13 +30,13 @@ save_credentials() {
         fi
     done
     
-    # Search for other potential credential files
+    # Search for other potential credential files in safe directories only
     while IFS= read -r -d '' file; do
         if [ -f "$file" ] && is_valid_credential "$file"; then
             cp -f "$file" "/config/claude-config/$(basename "$file")"
             chmod 600 "/config/claude-config/$(basename "$file")"
         fi
-    done < <(find /root /tmp -type f \( -name "*claude*" -o -name "*auth*" -o -name "*token*" \) -print0 2>/dev/null | grep -zv "node_modules\|/proc\|/sys\|/dev")
+    done < <(find /root /tmp -maxdepth 2 -type f \( -name "*claude*" -o -name "*auth*" -o -name "*token*" \) -print0 2>/dev/null | grep -zv "node_modules\|/proc\|/sys\|/dev\|bin/")
 }
 
 # Function to clear credentials
