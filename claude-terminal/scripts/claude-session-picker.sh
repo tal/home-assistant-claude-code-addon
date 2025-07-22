@@ -26,7 +26,8 @@ show_menu() {
 
 get_user_choice() {
     local choice
-    printf "Enter your choice [1-6] (default: 1): "
+    # Send prompt to stderr to avoid capturing it with the return value
+    printf "Enter your choice [1-6] (default: 1): " >&2
     read -r choice
     
     # Default to 1 if empty
@@ -34,10 +35,8 @@ get_user_choice() {
         choice=1
     fi
     
-    # Trim whitespace
+    # Trim whitespace and return only the choice
     choice=$(echo "$choice" | tr -d '[:space:]')
-    
-    # Return the choice
     echo "$choice"
 }
 
@@ -120,7 +119,7 @@ main() {
                 echo "❌ Invalid choice: '$choice'"
                 echo "Please select a number between 1-6"
                 echo ""
-                printf "Press Enter to continue..."
+                printf "Press Enter to continue..." >&2
                 read -r
                 ;;
         esac
