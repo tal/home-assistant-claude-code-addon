@@ -1,5 +1,45 @@
 # Changelog
 
+## 1.1.2
+
+### 🐛 Bug Fixes
+- **Fixed session picker input handling**: Improved compatibility with ttyd web terminal environment
+- **Enhanced input processing**: Better handling of user input with whitespace trimming
+- **Improved error messages**: Added debugging output showing actual invalid input values
+- **Better terminal compatibility**: Replaced `echo -n` with `printf` for web terminals
+
+## 1.1.1
+
+### 🐛 Bug Fixes  
+- **Fixed session picker not found**: Moved scripts from `/config/scripts/` to `/opt/scripts/` to avoid volume mapping conflicts
+- **Fixed authentication persistence**: Improved credential directory setup with proper symlink recreation
+- **Enhanced credential management**: Added proper file permissions (600) and logging for debugging
+- **Resolved volume mapping issues**: Scripts now persist correctly without being overwritten
+
+## 1.1.0
+
+### ✨ New Features
+- **Interactive Session Picker**: New menu-driven interface for choosing Claude session types
+  - 🆕 New interactive session (default)
+  - ⏩ Continue most recent conversation (-c)
+  - 📋 Resume from conversation list (-r) 
+  - ⚙️ Custom Claude command with manual flags
+  - 🐚 Drop to bash shell
+  - ❌ Exit option
+- **Configurable auto-launch**: New `auto_launch_claude` setting (default: true for backward compatibility)
+- **Added nano text editor**: Enables `/memory` functionality and general text editing
+
+### 🛠️ Architecture Changes
+- **Simplified credential management**: Removed complex modular credential system
+- **Streamlined startup process**: Eliminated problematic background services
+- **Cleaner configuration**: Reduced complexity while maintaining functionality
+- **Improved reliability**: Removed sources of startup failures from missing script dependencies
+
+### 🔧 Improvements
+- **Better startup logging**: More informative messages about configuration and setup
+- **Enhanced backward compatibility**: Existing users see no change in behavior by default
+- **Improved error handling**: Better fallback behavior when optional components are missing
+
 ## 1.0.2
 
 ### 🔒 Security Fixes
