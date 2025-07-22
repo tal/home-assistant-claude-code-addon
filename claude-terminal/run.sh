@@ -8,11 +8,24 @@ init_environment() {
 
     # Set up Claude Code CLI config directory
     mkdir -p /root/.config
+    
+    # Remove existing link if it exists and create fresh symlink
+    rm -rf /root/.config/anthropic
     ln -sf /config/claude-config /root/.config/anthropic
+
+    # Ensure proper permissions on any existing credential files
+    if [ -f "/config/claude-config/session_key" ]; then
+        chmod 600 /config/claude-config/session_key
+    fi
+    if [ -f "/config/claude-config/client.json" ]; then
+        chmod 600 /config/claude-config/client.json
+    fi
 
     # Set environment variables for Claude Code CLI
     export ANTHROPIC_CONFIG_DIR="/config/claude-config"
     export HOME="/root"
+    
+    bashio::log.info "Credential directory initialized: /config/claude-config"
 }
 
 # Install required tools
@@ -27,9 +40,9 @@ install_tools() {
 
 # Setup session picker script
 setup_session_picker() {
-    # Copy session picker script if available
-    if [ -f "/config/scripts/claude-session-picker.sh" ]; then
-        if ! cp /config/scripts/claude-session-picker.sh /usr/local/bin/claude-session-picker; then
+    # Copy session picker script from built-in location
+    if [ -f "/opt/scripts/claude-session-picker.sh" ]; then
+        if ! cp /opt/scripts/claude-session-picker.sh /usr/local/bin/claude-session-picker; then
             bashio::log.error "Failed to copy claude-session-picker script"
             exit 1
         fi
