@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.1.4
+
+### 🧹 Maintenance
+- **Cleaned up repository**: Removed erroneously committed test files (thanks @lox!)
+- **Improved codebase hygiene**: Cleared unnecessary temporary and test configuration files
+
+## 1.1.3
+
+### 🐛 Bug Fixes
+- **Fixed session picker input capture**: Resolved issue with ttyd intercepting stdin, preventing proper user input
+- **Improved terminal interaction**: Session picker now correctly captures user choices in web terminal environment
+
 ## 1.1.2
 
 ### 🐛 Bug Fixes
