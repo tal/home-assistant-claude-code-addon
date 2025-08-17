@@ -11,6 +11,7 @@ RUN apk add --no-cache \
     pipx \
     && npm install -g @anthropic-ai/claude-code@latest \
     && pipx install homeassistant-cli \
+    && pipx inject homeassistant-cli click==8.0.4 \
     && npm cache clean --force
 
 # Ensure pipx binaries are in PATH

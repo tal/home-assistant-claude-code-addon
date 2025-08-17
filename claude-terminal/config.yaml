@@ -1,6 +1,6 @@
 name: "Claude Terminal with HA CLI"
 description: "Terminal interface for Anthropic's Claude Code CLI"
-version: "1.1.5"
+version: "1.1.6"
 slug: "claude_terminal_ha"
 init: false
 
