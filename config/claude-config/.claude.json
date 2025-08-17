@@ -3,7 +3,17 @@
   "userID": "79a0ae643d94a5d625b919a93fcac7ca432fca3defd3ddc8d43b0a2b590076f5",
   "projects": {
     "/config": {
-      "allowedTools": [],
+      "allowedTools": [
+        {
+          "tool": "bash",
+          "allowed_commands": [
+            "ha",
+            "hassio", 
+            "homeassistant",
+            "hass"
+          ]
+        }
+      ],
       "history": [],
       "mcpContextUris": [],
       "mcpServers": {},

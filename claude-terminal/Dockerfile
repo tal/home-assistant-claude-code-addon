@@ -8,7 +8,10 @@ RUN apk add --no-cache \
     bash \
     curl \
     nano \
+    python3 \
+    py3-pip \
     && npm install -g @anthropic-ai/claude-code@latest \
+    && pip3 install homeassistant-cli \
     && npm cache clean --force
 
 # Create directory for Claude configuration and set working directory
